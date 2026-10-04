@@ -1,0 +1,412 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="theme-color" content="#040302" />
+<title>Inscrição | Aula para Nutricionistas</title>
+<meta name="robots" content="noindex" />
+<style>
+  :root{
+    --bg-1:#040302; --bg-2:#0A0603; --bg-3:#140A03;
+    --gold:#C9762B; --gold-light:#F2A93B;
+    --gold-soft:rgba(242,169,59,.16); --gold-glow:rgba(242,169,59,.55);
+    --cream:#F6EFE4;
+    --text-soft:rgba(246,239,228,.74); --text-softer:rgba(246,239,228,.54);
+    --glass-border:rgba(242,169,59,.22); --glass-border-soft:rgba(242,169,59,.14);
+    --danger:#FF7B6B; --whatsapp:#25D366; --whatsapp-deep:#128C7E;
+    --font:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; min-height:100vh; color:var(--cream); font-family:var(--font);
+    background:
+      radial-gradient(circle at 22% 15%, rgba(242,169,59,.20), transparent 45%),
+      radial-gradient(circle at 88% 25%, rgba(177,91,21,.16), transparent 42%),
+      linear-gradient(160deg, var(--bg-1) 0%, var(--bg-2) 55%, var(--bg-3) 100%);
+    -webkit-font-smoothing:antialiased; overflow-x:hidden; position:relative;
+  }
+  body::before{
+    content:""; position:fixed; inset:0; pointer-events:none; z-index:0; opacity:.5;
+    background:linear-gradient(rgba(255,255,255,.045) 1px, transparent 1px),
+               linear-gradient(90deg, rgba(255,255,255,.045) 1px, transparent 1px);
+    background-size:64px 64px;
+  }
+  .wrap{position:relative; z-index:1; min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:28px 22px}
+  .topbar{width:min(720px,100%); margin-bottom:16px}
+  .progress{height:6px; border-radius:999px; overflow:hidden; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.06)}
+  .progress > div{height:100%; width:0; border-radius:999px; background:linear-gradient(90deg, var(--gold), var(--gold-light)); box-shadow:0 0 16px var(--gold-glow); transition:width .3s cubic-bezier(.2,.65,.2,1)}
+
+  .stage{position:relative; width:min(720px,100%)}
+  .card{
+    position:relative; width:100%; padding:42px; border-radius:26px; overflow:hidden; text-align:center;
+    background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+    border:1px solid var(--glass-border);
+    box-shadow:0 24px 60px rgba(0,0,0,.55), 0 0 60px rgba(242,169,59,.10), inset 0 1px 0 rgba(255,255,255,.06);
+    -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px);
+  }
+  .screen{display:none; position:relative; z-index:1}
+  .screen.active{display:block; animation:fade .24s ease}
+  @keyframes fade{from{opacity:0; transform:translateY(10px)} to{opacity:1; transform:none}}
+
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:8px; margin-bottom:18px; padding:7px 14px; border-radius:999px;
+    background:var(--gold-soft); border:1px solid rgba(242,169,59,.35);
+    font-size:.74rem; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:var(--gold-light);
+  }
+  h1{margin:0 auto 14px; max-width:600px; font-size:clamp(1.9rem,4.4vw,3rem); line-height:1.06; letter-spacing:-.02em; font-weight:800; color:var(--cream)}
+  p{margin:0 auto 26px; max-width:520px; color:var(--text-soft); font-size:1.02rem; line-height:1.6}
+  label{display:block; font-size:14px; color:var(--text-soft); margin-bottom:10px}
+
+  input,textarea{
+    width:100%; padding:17px 18px; border-radius:14px; outline:none; text-align:center;
+    background:rgba(255,255,255,.04); border:1px solid var(--glass-border-soft);
+    color:var(--cream); font-family:var(--font); font-size:20px;
+    transition:border-color .2s ease, box-shadow .2s ease, background .2s ease;
+  }
+  input::placeholder,textarea::placeholder{color:var(--text-softer)}
+  input:focus,textarea:focus{border-color:var(--gold-light); background:rgba(255,255,255,.07); box-shadow:0 0 0 1px rgba(242,169,59,.35), 0 0 28px rgba(242,169,59,.18)}
+
+  .options{display:grid; gap:12px; margin-top:22px}
+  .option{
+    position:relative; width:100%; padding:17px 56px; border-radius:14px; cursor:pointer;
+    background:rgba(255,255,255,.04); border:1px solid var(--glass-border-soft);
+    color:var(--cream); font-family:var(--font); font-size:16px; line-height:1.35; text-align:center;
+    transition:transform .2s ease, border-color .2s ease, background .2s ease, box-shadow .2s ease;
+  }
+  .option:hover{transform:translateY(-2px); border-color:rgba(242,169,59,.45); background:rgba(255,255,255,.07)}
+  .option.selected{border-color:var(--gold-light); background:var(--gold-soft); box-shadow:0 0 26px rgba(242,169,59,.2)}
+  .option.selected::after{
+    content:""; position:absolute; right:16px; top:50%; width:24px; height:24px; margin-top:-12px; border-radius:50%;
+    background:var(--gold-light) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231a0d02' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 12.5 4 4 8-9'/%3E%3C/svg%3E") center/14px no-repeat;
+  }
+
+  .actions{display:flex; justify-content:center; gap:12px; margin-top:30px; flex-wrap:wrap}
+  @keyframes ctaPulse{
+    0%{box-shadow:0 0 0 0 rgba(242,169,59,.48), 0 14px 30px rgba(0,0,0,.5)}
+    50%{box-shadow:0 0 0 14px rgba(242,169,59,0), 0 0 30px rgba(242,169,59,.4), 0 18px 34px rgba(0,0,0,.5)}
+    100%{box-shadow:0 0 0 0 rgba(242,169,59,0), 0 14px 30px rgba(0,0,0,.5)}
+  }
+  button.primary,button.secondary{min-height:54px; border-radius:14px; padding:14px 30px; font-size:15px; cursor:pointer; font-family:var(--font); transition:transform .2s ease, filter .2s ease, border-color .2s ease}
+  button.primary{border:0; color:#fff; font-weight:900; text-shadow:0 1px 3px rgba(60,25,0,.45); background:linear-gradient(145deg, var(--gold-light), var(--gold)); animation:ctaPulse 2.2s ease-in-out infinite}
+  button.primary:hover{transform:translateY(-1px); filter:brightness(1.06)}
+  button.secondary{color:var(--cream); font-weight:600; background:rgba(255,255,255,.05); border:1px solid var(--glass-border)}
+  button.secondary:hover{transform:translateY(-1px); border-color:var(--gold-light)}
+
+  .error{color:var(--danger); margin-top:12px; font-size:14px; min-height:20px}
+  .final-box{padding:22px; border-radius:16px; background:rgba(255,255,255,.04); border:1px solid var(--glass-border-soft)}
+  .final-box p{margin:0 auto}
+  .whatsapp-block{margin-top:8px}
+  .whatsapp-block p{font-size:14px; margin-bottom:14px}
+  .whatsapp{
+    min-height:54px; width:100%; display:inline-flex; align-items:center; justify-content:center; gap:10px; border-radius:14px; padding:13px 22px;
+    font-size:15.5px; font-weight:900; color:#fff; text-decoration:none; border:0;
+    background:linear-gradient(145deg, var(--whatsapp), var(--whatsapp-deep)); box-shadow:0 12px 28px rgba(37,211,102,.24);
+    transition:transform .2s ease, filter .2s ease;
+  }
+  .whatsapp:hover{transform:translateY(-1px); filter:brightness(1.05)}
+
+  @keyframes wiggleFloat{0%,100%{transform:translateY(0) rotate(0)} 50%{transform:translateY(-14px) rotate(-3deg)}}
+  @keyframes wiggleFloatAlt{0%,100%{transform:translateY(0) rotate(0)} 50%{transform:translateY(12px) rotate(3deg)}}
+  .floating-icon{
+    position:absolute; z-index:2; border-radius:50%; display:grid; place-items:center; pointer-events:none;
+    background:linear-gradient(150deg, rgba(255,255,255,.10), rgba(255,255,255,.02));
+    border:1px solid rgba(242,169,59,.4); box-shadow:0 18px 34px rgba(0,0,0,.35);
+  }
+  .floating-icon svg{width:26px; height:26px}
+  .icon-a{width:58px; height:58px; top:-24px; left:-26px; animation:wiggleFloat 5.5s ease-in-out infinite}
+  .icon-b{width:64px; height:64px; bottom:-24px; right:-26px; animation:wiggleFloatAlt 6.5s ease-in-out infinite}
+
+  @media (max-width:860px){.card{padding:32px 24px}}
+  @media (max-width:560px){
+    .wrap{justify-content:flex-start; padding:22px 14px}
+    .card{padding:28px 18px 24px}
+    h1{font-size:clamp(1.8rem,8.4vw,2.3rem)} p{font-size:.97rem}
+    input{font-size:18px} .option{padding:16px 50px}
+    .actions button{flex:1 1 auto}
+    .floating-icon{transform:scale(.8)} .icon-a{left:-10px;top:-20px} .icon-b{right:-10px;bottom:-20px}
+  }
+  @media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none !important; transition:none !important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar"><div class="progress"><div id="bar"></div></div></div>
+
+  <div class="stage">
+  <div class="floating-icon icon-a" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="var(--gold-light)" stroke-width="1.6"><path d="M6 3c0 6 12 12 12 18M18 3c0 6-12 12-12 18M6 8h12M6 16h12"/></svg></div>
+  <div class="floating-icon icon-b" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="var(--gold-light)" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/></svg></div>
+  <form id="leadForm" class="card" novalidate>
+    <div class="screen active" data-key="name">
+      <div class="eyebrow">Etapa 1</div>
+      <h1>Qual é o seu nome?</h1>
+      <p>Vamos começar pelo básico.</p>
+      <input id="name" name="firstname" autocomplete="name" placeholder="Digite seu nome" />
+      <div class="error"></div>
+      <div class="actions"><button type="button" class="primary" onclick="next()">Continuar</button></div>
+    </div>
+
+    <div class="screen" data-key="phone">
+      <div class="eyebrow">Etapa 1</div>
+      <h1>Qual é o seu número de WhatsApp?</h1>
+      <input id="phone" name="phone" autocomplete="tel" placeholder="(11) 99999-9999" />
+      <div class="error"></div>
+      <div class="actions">
+        <button type="button" class="secondary" onclick="back()">Voltar</button>
+        <button type="button" class="primary" onclick="next()">Continuar</button>
+      </div>
+    </div>
+
+    <div class="screen" data-key="occupation">
+      <div class="eyebrow">Etapa 1</div>
+      <h1>Qual é a sua ocupação atual?</h1>
+      <p>Escolha a opção que melhor representa você hoje.</p>
+      <div class="options">
+        <button type="button" class="option" data-value="Nutricionista">Nutricionista</button>
+        <button type="button" class="option" data-value="Estudante de Nutrição">Estudante de Nutrição</button>
+        <button type="button" class="option" data-value="Outra área da saúde">Profissional de outra área da saúde</button>
+        <button type="button" class="option" data-value="Fora da saúde">Não trabalho na área da saúde</button>
+      </div>
+      <input type="hidden" id="occupation" name="occupation" />
+      <div class="error"></div>
+      <div class="actions"><button type="button" class="secondary" onclick="back()">Voltar</button></div>
+    </div>
+
+    <div class="screen" data-key="portfolio">
+      <div class="eyebrow">Etapa 2 · Nutricionistas</div>
+      <h1>Hoje você já possui sua própria carteira de pacientes?</h1>
+      <div class="options">
+        <button type="button" class="option" data-group="portfolio" data-value="Sim, já tenho minha carteira">Sim, já tenho minha carteira de pacientes</button>
+        <button type="button" class="option" data-group="portfolio" data-value="Ainda estou montando">Ainda estou construindo minha carteira</button>
+        <button type="button" class="option" data-group="portfolio" data-value="A maioria é de convênio">A maioria dos meus pacientes são de convênio</button>
+      </div>
+      <input type="hidden" id="portfolio" name="patient_portfolio" />
+      <div class="error"></div>
+      <div class="actions"><button type="button" class="secondary" onclick="back()">Voltar</button></div>
+    </div>
+
+    <div class="screen" data-key="authority">
+      <div class="eyebrow">Etapa 2 · Nutricionistas</div>
+      <h1>Você se considera uma autoridade na sua área?</h1>
+      <div class="options">
+        <button type="button" class="option" data-group="authority" data-value="Acredito que sim">Acredito que sim</button>
+        <button type="button" class="option" data-group="authority" data-value="Acredito que me falta conhecimento">Acredito que ainda me falta conhecimento</button>
+      </div>
+      <input type="hidden" id="authority" name="authority_perception" />
+      <div class="error"></div>
+      <div class="actions"><button type="button" class="secondary" onclick="back()">Voltar</button></div>
+    </div>
+
+    <div class="screen" data-key="price">
+      <div class="eyebrow">Etapa 2 · Nutricionistas</div>
+      <h1>Quanto você cobra atualmente por consulta ou consultoria?</h1>
+      <div class="options">
+        <button type="button" class="option" data-group="price" data-value="R$ 30 a R$ 99">R$ 30 a R$ 99</button>
+        <button type="button" class="option" data-group="price" data-value="R$ 100 a R$ 199">R$ 100 a R$ 199</button>
+        <button type="button" class="option" data-group="price" data-value="R$ 200 a R$ 399">R$ 200 a R$ 399</button>
+        <button type="button" class="option" data-group="price" data-value="R$ 400 a R$ 999">R$ 400 a R$ 999</button>
+        <button type="button" class="option" data-group="price" data-value="R$ 1.000 ou mais">R$ 1.000 ou mais</button>
+      </div>
+      <input type="hidden" id="price" name="current_price_range" />
+      <div class="error"></div>
+      <div class="actions"><button type="button" class="secondary" onclick="back()">Voltar</button></div>
+    </div>
+
+    <div class="screen" data-key="patients">
+      <div class="eyebrow">Etapa 2 · Nutricionistas</div>
+      <h1>Quantas pessoas você atende atualmente?</h1>
+      <div class="options">
+        <button type="button" class="option" data-group="patients" data-value="Ainda não atendo">Ainda não atendo</button>
+        <button type="button" class="option" data-group="patients" data-value="1 a 5">1 a 5 pessoas</button>
+        <button type="button" class="option" data-group="patients" data-value="6 a 15">6 a 15 pessoas</button>
+        <button type="button" class="option" data-group="patients" data-value="16 a 30">16 a 30 pessoas</button>
+        <button type="button" class="option" data-group="patients" data-value="Mais de 30">Mais de 30 pessoas</button>
+      </div>
+      <input type="hidden" id="patients" name="patients_served" />
+      <div class="error"></div>
+      <div class="actions"><button type="button" class="secondary" onclick="back()">Voltar</button></div>
+    </div>
+
+    <div class="screen" data-key="final">
+      <div class="eyebrow">Tudo certo</div>
+      <h1>Cadastro recebido</h1>
+
+      <div class="whatsapp-block">
+        <p>Entre no nosso grupo do WhatsApp para receber os avisos:</p>
+        <a class="whatsapp" href="https://chat.whatsapp.com/EcvuRWR2HYG0fOIQ1E8gGS?mode=gi_t" target="_blank" rel="noopener noreferrer">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.472-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" fill="#fff"/>
+            <path d="M12.004 2.003c-5.514 0-9.997 4.483-9.997 9.997 0 1.762.463 3.483 1.343 4.997L2 22l5.13-1.345a9.96 9.96 0 0 0 4.874 1.242h.004c5.514 0 9.997-4.483 9.997-9.997 0-2.67-1.04-5.18-2.928-7.069a9.93 9.93 0 0 0-7.073-2.828zm0 18.174h-.003a8.19 8.19 0 0 1-4.175-1.143l-.3-.178-3.045.799.813-2.968-.195-.305a8.163 8.163 0 0 1-1.256-4.382c0-4.516 3.674-8.19 8.19-8.19a8.14 8.14 0 0 1 5.79 2.4 8.14 8.14 0 0 1 2.399 5.79c0 4.516-3.673 8.177-8.218 8.177z" fill="#fff"/>
+          </svg>
+          ENTRAR NO GRUPO
+        </a>
+      </div>
+    </div>
+  </form>
+  </div>
+</div>
+
+<script src="../assets/config.js"></script>
+<script>
+  const SUPABASE_URL = window.SUPABASE_URL || "";
+  const SUPABASE_ANON_KEY = window.SUPABASE_ANON_KEY || "";
+  const SUPABASE_TABLE = "form_leads_nutricionistas";
+
+  const nutritionistFlow = ["name","phone","occupation","portfolio","authority","price","patients","final"];
+  const nonNutritionistFlow = ["name","phone","occupation","final"];
+  let flow = ["name","phone","occupation"];
+  let currentIndex = 0;
+
+  // O e-mail já foi coletado na página de captura: vem por ?email= ou fica salvo no navegador.
+  function getLeadEmail(){
+    try{
+      const q = new URLSearchParams(location.search).get("email");
+      const v = (q || localStorage.getItem("lead_email") || "").trim();
+      return v;
+    }catch(e){ return ""; }
+  }
+
+  function screens(){ return [...document.querySelectorAll(".screen")]; }
+  function activeKey(){ return flow[currentIndex]; }
+
+  function show(key){
+    screens().forEach(s => s.classList.toggle("active", s.dataset.key === key));
+    updateProgress();
+  }
+
+  function updateProgress(){
+    const bar = document.getElementById("bar");
+    const total = Math.max(flow.length - 1, 1);
+    const pct = Math.min((currentIndex / total) * 100, 100);
+    bar.style.width = pct + "%";
+  }
+
+  function errorFor(key, msg=""){
+    const s = document.querySelector(`.screen[data-key="${key}"]`);
+    if(s) s.querySelector(".error").textContent = msg;
+  }
+
+  function validate(key){
+    const value = (id) => (document.getElementById(id)?.value || "").trim();
+    if(key === "name" && !value("name")) return "Digite seu nome.";
+    if(key === "phone" && value("phone").replace(/\D/g,"").length < 10) return "Digite um WhatsApp válido.";
+    if(key === "occupation" && !value("occupation")) return "Escolha uma opção.";
+    return "";
+  }
+
+  async function next(){
+    const key = activeKey();
+    const err = validate(key);
+    errorFor(key, err);
+    if(err) return;
+    currentIndex = Math.min(currentIndex + 1, flow.length - 1);
+    if(activeKey() === "final") await submitForm();
+    show(activeKey());
+  }
+
+  function back(){
+    if(currentIndex > 0){
+      currentIndex--;
+      show(activeKey());
+    }
+  }
+
+  function choose(group, value){
+    document.getElementById(group).value = value;
+    document.querySelectorAll(`[data-group="${group}"]`).forEach(b => b.classList.toggle("selected", b.dataset.value === value));
+    errorFor(activeKey(), "");
+    setTimeout(() => next(), 120);
+  }
+
+  document.querySelectorAll(".option").forEach(btn => {
+    btn.addEventListener("click", async () => {
+      const key = activeKey();
+
+      if(key === "occupation"){
+        const value = btn.dataset.value;
+        document.getElementById("occupation").value = value;
+        document.querySelectorAll('.screen[data-key="occupation"] .option').forEach(b => b.classList.toggle("selected", b === btn));
+        if(value === "Nutricionista"){
+          flow = nutritionistFlow;
+          currentIndex = flow.indexOf("portfolio");
+          show("portfolio");
+        } else {
+          flow = nonNutritionistFlow;
+          currentIndex = flow.indexOf("final");
+          await submitForm();
+          show("final");
+        }
+        return;
+      }
+
+      const group = btn.dataset.group;
+      if(group) choose(group, btn.dataset.value);
+    });
+  });
+
+  function getAllAnswers(){
+    return {
+      firstname:(document.getElementById("name")?.value || "").trim(),
+      phone:(document.getElementById("phone")?.value || "").trim(),
+      email:getLeadEmail(),
+      occupation:(document.getElementById("occupation")?.value || "").trim(),
+      patient_portfolio:(document.getElementById("portfolio")?.value || "").trim() || null,
+      authority_perception:(document.getElementById("authority")?.value || "").trim() || null,
+      current_price_range:(document.getElementById("price")?.value || "").trim() || null,
+      patients_served:(document.getElementById("patients")?.value || "").trim() || null
+    };
+  }
+
+  // Se o envio falhar (erro ou demora de mais de 8 s), a pessoa vai direto para o grupo do WhatsApp mesmo assim.
+  async function submitForm(){
+    const payload = getAllAnswers();
+    const goToGroup = () => { window.location.href = document.querySelector(".whatsapp").href; };
+
+    if(!SUPABASE_URL || !SUPABASE_ANON_KEY){
+      console.error("Supabase não configurado (SUPABASE_URL / SUPABASE_ANON_KEY ausentes).");
+      goToGroup();
+      return;
+    }
+
+    const ctrl = new AbortController();
+    const timeout = setTimeout(() => ctrl.abort(), 8000);
+    try{
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/${SUPABASE_TABLE}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "apikey": SUPABASE_ANON_KEY,
+          "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
+          "Prefer": "return=minimal"
+        },
+        body: JSON.stringify(payload),
+        signal: ctrl.signal
+      });
+
+      if(!res.ok){
+        const text = await res.text();
+        throw new Error(text || `HTTP ${res.status}`);
+      }
+    }catch(e){
+      console.error("Erro ao enviar para o Supabase:", e);
+      goToGroup();
+    }finally{
+      clearTimeout(timeout);
+    }
+  }
+
+
+  document.addEventListener("keydown", (e)=>{
+    if(e.key === "Enter"){
+      const key = activeKey();
+      if(["name","phone"].includes(key)){
+        e.preventDefault();
+        next();
+      }
+    }
+  });
+
+  show("name");
+</script>
+</body>
+</html>
