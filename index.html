@@ -393,6 +393,12 @@
     updateCountdown();
     const timer = setInterval(updateCountdown, 1000);
 
+    // Se a pessoa voltar para esta página pelo botão "voltar", o botão não fica travado em "Enviando...".
+    window.addEventListener('pageshow', () => {
+      const b = document.getElementById('cta-btn');
+      b.disabled = false; b.textContent = 'Quero decifrar os genes!';
+    });
+
     document.getElementById('optin-form').addEventListener('submit', async function(e){
       e.preventDefault();
       const input = this.querySelector('input[name="email"]');
@@ -406,14 +412,19 @@
         input.focus();
         return;
       }
+      // Salvar o e-mail é bônus: com erro, Supabase fora do ar ou demora de 5 s, a pessoa segue para o vídeo do mesmo jeito.
+      try{ localStorage.setItem('lead_email', email); }catch(_){}
+      const goNext = () => { window.location.href = REDIRECT_TO + '?email=' + encodeURIComponent(email); };
+      btn.disabled = true; btn.textContent = 'Enviando...';
+
       if (!SUPABASE_URL || !SUPABASE_ANON_KEY){
         console.error('Supabase não configurado (SUPABASE_URL / SUPABASE_ANON_KEY ausentes).');
-        err.textContent = 'Não foi possível enviar agora. Tente novamente em instantes.';
+        goNext();
         return;
       }
 
-      const label = btn.textContent;
-      btn.disabled = true; btn.textContent = 'Enviando...';
+      const ctrl = new AbortController();
+      const timeout = setTimeout(() => ctrl.abort(), 5000);
       try{
         const res = await fetch(SUPABASE_URL + '/rest/v1/' + SUPABASE_TABLE, {
           method: 'POST',
@@ -423,16 +434,16 @@
             'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
             'Prefer': 'return=minimal'
           },
-          body: JSON.stringify({ email: email })
+          body: JSON.stringify({ email: email }),
+          signal: ctrl.signal
         });
         if (!res.ok) throw new Error((await res.text()) || ('HTTP ' + res.status));
-        try{ localStorage.setItem('lead_email', email); }catch(_){}
-        window.location.href = REDIRECT_TO + '?email=' + encodeURIComponent(email);
       }catch(e2){
         console.error('Erro ao enviar para o Supabase:', e2);
-        err.textContent = 'Não foi possível enviar agora. Verifique sua conexão e tente novamente.';
-        btn.disabled = false; btn.textContent = label;
+      }finally{
+        clearTimeout(timeout);
       }
+      goNext();
     });
 
     // Barra de "carregando" decorativa (bloco HTML comentado por enquanto).
