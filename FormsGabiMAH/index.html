@@ -357,7 +357,7 @@
     };
   }
 
-  // Se o envio falhar (erro ou demora de mais de 8 s), a pessoa vai direto para o grupo do WhatsApp mesmo assim.
+  // Se o envio falhar (erro ou demora de mais de 5 s), a pessoa vai direto para o grupo do WhatsApp mesmo assim.
   async function submitForm(){
     const payload = getAllAnswers();
     const goToGroup = () => { window.location.href = document.querySelector(".whatsapp").href; };
@@ -369,7 +369,7 @@
     }
 
     const ctrl = new AbortController();
-    const timeout = setTimeout(() => ctrl.abort(), 8000);
+    const timeout = setTimeout(() => ctrl.abort(), 5000);
     try{
       const res = await fetch(`${SUPABASE_URL}/rest/v1/${SUPABASE_TABLE}`, {
         method: "POST",
