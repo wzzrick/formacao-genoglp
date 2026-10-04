@@ -1,0 +1,28 @@
+[build]
+  command = "node build.js"
+  publish = "."
+
+# Rota do formulario (preserva o design/funcionamento original)
+[[redirects]]
+  from = "/FormsGabiMAH"
+  to = "/FormsGabiMAH/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/FormsGabiMAH/"
+  to = "/FormsGabiMAH/index.html"
+  status = 200
+
+# Rota da pagina de obrigado
+[[redirects]]
+  from = "/pagObrigadoGabi"
+  to = "/pagObrigadoGabi/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/pagObrigadoGabi/"
+  to = "/pagObrigadoGabi/index.html"
+  status = 200
+
+# A raiz "/" agora e a pagina de captura de e-mail (index.html), que envia o e-mail
+# ao Supabase e leva para /pagObrigadoGabi.
