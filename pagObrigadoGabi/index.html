@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="theme-color" content="#040302" />
+<title>Obrigado | Aula para Nutricionistas</title>
+<meta name="robots" content="noindex" />
+
+
+<style>
+  :root{
+    --bg-1:#040302; --bg-2:#0A0603; --bg-3:#140A03;
+    --gold:#C9762B; --gold-light:#F2A93B;
+    --gold-soft:rgba(242,169,59,.16); --gold-glow:rgba(242,169,59,.55);
+    --cream:#F6EFE4;
+    --text-soft:rgba(246,239,228,.74); --text-softer:rgba(246,239,228,.54);
+    --glass-border:rgba(242,169,59,.22);
+    --glass-shadow:0 24px 60px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.05);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth; overflow-x:clip}
+  body{
+    margin:0; min-height:100vh; color:var(--cream);
+    font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background:
+      radial-gradient(circle at 22% 15%, rgba(242,169,59,.20), transparent 45%),
+      radial-gradient(circle at 88% 25%, rgba(177,91,21,.16), transparent 42%),
+      linear-gradient(160deg, var(--bg-1) 0%, var(--bg-2) 55%, var(--bg-3) 100%);
+    -webkit-font-smoothing:antialiased; overflow-x:clip;
+  }
+  body::before{
+    content:""; position:fixed; inset:0; pointer-events:none; z-index:0; opacity:.5;
+    background:linear-gradient(rgba(255,255,255,.045) 1px, transparent 1px),
+               linear-gradient(90deg, rgba(255,255,255,.045) 1px, transparent 1px);
+    background-size:64px 64px;
+  }
+  a{text-decoration:none;color:inherit}
+
+  .hero{position:relative; z-index:1; min-height:100vh; display:flex; align-items:center; padding:32px 0}
+  .container{width:min(calc(100% - 40px), 1180px); margin:0 auto}
+  .hero-grid{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,.8fr); gap:56px; align-items:center}
+
+  /* ===== Texto ===== */
+  .content-col{text-align:center}
+  .badges-row{display:flex; justify-content:center; margin-bottom:16px}
+  .pill{
+    display:inline-flex; align-items:center; gap:8px; padding:7px 14px; border-radius:999px;
+    background:var(--gold-soft); border:1px solid rgba(242,169,59,.35);
+    font-size:.74rem; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:var(--gold-light);
+  }
+  .pill i{width:7px; height:7px; border-radius:50%; background:var(--gold-light); box-shadow:0 0 10px var(--gold-glow)}
+  h1{
+    margin:0 auto 14px; max-width:560px;
+    font-size:clamp(2.1rem,4.4vw,3.4rem); line-height:1.05; letter-spacing:-.02em; font-weight:800; color:var(--cream);
+  }
+  .subtitle{margin:0 auto 26px; max-width:460px; font-size:1.02rem; line-height:1.6; color:var(--text-soft)}
+
+  @keyframes ctaPulse{
+    0%{box-shadow:0 0 0 0 rgba(242,169,59,.48), 0 16px 30px rgba(0,0,0,.5)}
+    50%{box-shadow:0 0 0 14px rgba(242,169,59,0), 0 0 30px rgba(242,169,59,.4), 0 20px 36px rgba(0,0,0,.5)}
+    100%{box-shadow:0 0 0 0 rgba(242,169,59,0), 0 16px 30px rgba(0,0,0,.5)}
+  }
+  .cta-btn{
+    display:inline-flex; align-items:center; justify-content:center; gap:10px;
+    width:100%; margin-top:24px; min-height:58px; padding:15px 28px; border-radius:14px;
+    background:linear-gradient(145deg, var(--gold-light), var(--gold));
+    color:#fff; font-size:1rem; font-weight:900; letter-spacing:.01em; text-shadow:0 1px 3px rgba(60,25,0,.45);
+    animation:ctaPulse 2.2s ease-in-out infinite; transition:filter .2s ease, transform .2s ease;
+  }
+  .cta-btn:hover{filter:brightness(1.06); transform:translateY(-1px)}
+  .note{margin:14px 0 0; font-size:.8rem; letter-spacing:.14em; text-transform:uppercase; font-weight:800; color:var(--text-softer)}
+
+  /* ===== Vídeo com glow ===== */
+  .video-col{position:relative; display:flex; justify-content:center}
+  .video-stack{position:relative; width:min(100%,340px); display:flex; flex-direction:column; align-items:center}
+  .video-wrap{position:relative; width:100%}
+  .video-wrap::before{
+    content:""; position:absolute; inset:-5%; z-index:0; pointer-events:none;
+    background:radial-gradient(circle at 50% 45%, rgba(242,169,59,.38), transparent 62%); filter:blur(34px);
+  }
+  .video-shell{position:relative; z-index:1; width:100%}
+  .video-frame{
+    position:relative; width:100%; padding-top:177.78%; border-radius:26px; overflow:hidden; background:#000;
+    border:1px solid var(--glass-border); box-shadow:var(--glass-shadow), 0 0 60px rgba(242,169,59,.2);
+  }
+  .video-frame iframe{position:absolute; inset:0; width:100%; height:100%; border:0}
+
+  /* ===== Ícones flutuantes (sobe/desce devagar) ===== */
+  @keyframes wiggleFloat{0%,100%{transform:translateY(0) rotate(0)} 50%{transform:translateY(-14px) rotate(-3deg)}}
+  @keyframes wiggleFloatAlt{0%,100%{transform:translateY(0) rotate(0)} 50%{transform:translateY(12px) rotate(3deg)}}
+  .floating-icon{
+    position:absolute; z-index:2; border-radius:50%; display:grid; place-items:center;
+    background:linear-gradient(150deg, rgba(255,255,255,.10), rgba(255,255,255,.02));
+    border:1px solid rgba(242,169,59,.4); box-shadow:0 18px 34px rgba(0,0,0,.35);
+    -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px);
+  }
+  .floating-icon svg{width:26px; height:26px}
+  .icon-a{width:58px; height:58px; top:8%; left:-6%; animation:wiggleFloat 5.5s ease-in-out infinite}
+  .icon-b{width:64px; height:64px; bottom:12%; right:-6%; animation:wiggleFloatAlt 6.5s ease-in-out infinite}
+
+  @media (max-width:960px){
+    .hero{padding:28px 0 40px; min-height:0}
+    .hero-grid{grid-template-columns:minmax(0,1fr); gap:20px}
+    .subtitle{margin-bottom:0}
+    .video-col{order:0}
+    .icon-a{left:2%} .icon-b{right:2%}
+  }
+  @media (max-width:560px){
+    .container{width:min(calc(100% - 28px), 1180px)}
+    h1{font-size:clamp(1.9rem,8.5vw,2.4rem)}
+    .subtitle{font-size:.95rem}
+    .floating-icon{transform:scale(.85)}
+  }
+  @media (prefers-reduced-motion: reduce){
+    *,*::before,*::after{animation:none !important; transition:none !important}
+  }
+</style>
+</head>
+<body>
+  <main class="hero">
+    <div class="container">
+      <div class="hero-grid">
+
+        <div class="content-col">
+          <div class="badges-row"><span class="pill"><i></i>Tudo certo</span></div>
+          <h1>Gabi tem um recadinho pra você</h1>
+          <p class="subtitle">Assista ao vídeo antes de continuar.</p>
+        </div>
+
+        <div class="video-col">
+         <div class="video-stack">
+          <div class="video-wrap">
+          <div class="video-shell">
+            <div class="video-frame">
+              <iframe
+                src="https://player.vimeo.com/video/1227854017?title=0&byline=0&portrait=0"
+                allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
+                allowfullscreen
+                title="Gabi tem um recadinho pra você"></iframe>
+            </div>
+          </div>
+          <div class="floating-icon icon-a" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--gold-light)" stroke-width="1.6"><path d="M6 3c0 6 12 12 12 18M18 3c0 6-12 12-12 18M6 8h12M6 16h12"/></svg>
+          </div>
+          <div class="floating-icon icon-b" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--gold-light)" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/></svg>
+          </div>
+          </div>
+          <a class="cta-btn" id="cta" href="../FormsGabiMAH/">RESPONDER FORMULÁRIO</a>
+          <p class="note">Leva menos de 1 minuto</p>
+         </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+<script>
+  // Repassa o e-mail (vindo da página de captura por ?email=) para o formulário.
+  (function(){
+    try{
+      var q = new URLSearchParams(location.search).get("email");
+      if(q) localStorage.setItem("lead_email", q.trim());
+      var e = (q || localStorage.getItem("lead_email") || "").trim();
+      if(e) document.getElementById("cta").href = "../FormsGabiMAH/?email=" + encodeURIComponent(e);
+    }catch(err){}
+  })();
+</script>
+</body>
+</html>
